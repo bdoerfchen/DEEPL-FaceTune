@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Tkinter main",
+            "name": "Start main",
             "type": "python",
             "request": "launch",
             "program": "./src/main.py",
