@@ -2,10 +2,18 @@ import eel
 from python.AEModel import AEModel 
 from python.ModelResult import ModelResult
 
-eel.init("./src/web")  
-    
 
 models : list[AEModel] = []
+def main():
+    # Init eel
+    eel.init("./src/web")          
+
+    # Load and init models
+    for model in models:
+        model.load()
+
+    # Start the index.html file 
+    eel.start("index.html", mode=None)
 
 @eel.expose
 def decodeImage(baseImage) -> list:
@@ -26,9 +34,5 @@ def decodeLatentEncoding(modelIndex, encoding):
     return models[modelIndex].decode(encoding)
 
 
-    
-
-
-
-# Start the index.html file 
-eel.start("index.html", mode=None)
+if __name__ == "__main__"
+    main()
