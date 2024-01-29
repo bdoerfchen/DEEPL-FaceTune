@@ -34,5 +34,5 @@ def decodeLatentEncoding(modelIndex, encoding):
     return models[modelIndex].decode(encoding)
 
 
-if __name__ == "__main__"
+if __name__ == "__main__":
     main()
