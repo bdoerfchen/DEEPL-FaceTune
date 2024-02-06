@@ -1,8 +1,12 @@
 import eel 
-from python.AEModel import AEModel 
+from python.AEModel import AEModel
+from python.IdentityAE import IdentityAE 
 from python.ModelResult import ModelResult
+from python.ftutilities import *
 
-models : list[AEModel] = []
+models : list[AEModel] = [
+    IdentityAE(), IdentityAE(), IdentityAE(), IdentityAE()
+]
 def main():
     # Init eel
     eel.init("./src/web")          
@@ -17,22 +21,26 @@ def main():
 @eel.expose
 def decodeImage(baseImage) -> list:
     """A function to en- and decode and image with all available models"""
+    img = b64ToImage(baseImage)
+
     result : list[ModelResult] = []
 
     for model in models:
         result.append(
-            ModelResult(model, baseImage)
+            ModelResult(model, img).result_b64
         )
     return result
 
 @eel.expose
-def decodeLatentEncoding(modelIndex, encoding):
-    assert int(modelIndex) == modelIndex and modelIndex >= 0
+def decodeLatentEncoding(name, encoding):
     assert isinstance(encoding, list)
 
-    resultImage = models[modelIndex].decode(encoding)
-    #image to datastring
-    b64string = ""
+    model = [m for m in models if m.getName() == name]
+    assert len(model) == 1
+    model = model[0]
+
+    resultImage = model.decode(encoding)
+    b64string = imageToB64(resultImage)
     return b64string
 
 
