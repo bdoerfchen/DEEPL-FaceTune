@@ -1,4 +1,4 @@
-from AEModel import AEModel
+from .AEModel import AEModel
 
 class ModelResult:
 

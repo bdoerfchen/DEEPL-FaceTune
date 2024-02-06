@@ -2,7 +2,6 @@ import eel
 from python.AEModel import AEModel 
 from python.ModelResult import ModelResult
 
-
 models : list[AEModel] = []
 def main():
     # Init eel
@@ -31,7 +30,10 @@ def decodeLatentEncoding(modelIndex, encoding):
     assert int(modelIndex) == modelIndex and modelIndex >= 0
     assert isinstance(encoding, list)
 
-    return models[modelIndex].decode(encoding)
+    resultImage = models[modelIndex].decode(encoding)
+    #image to datastring
+    b64string = ""
+    return b64string
 
 
 if __name__ == "__main__":
