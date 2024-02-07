@@ -15,6 +15,6 @@ def imageToB64(img) -> str:
     buffered = BytesIO()
     pilImg = Image.fromarray(img)
     pilImg.save(buffered, format="png")
-    print(str(base64.b64encode(buffered.getvalue())))
+    # print(str(base64.b64encode(buffered.getvalue())))
     img_str = "data:image/png;base64," + str(base64.b64encode(buffered.getvalue()))[2:-1]
     return img_str
