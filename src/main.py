@@ -2,11 +2,12 @@ import eel
 from python.models.AEModel import AEModel
 from python.models.IdentityAE import IdentityAE 
 from python.models.AEGANModel import AEGANModel
+from python.models.CAEModel import CAEModel
 from python.ModelResult import ModelResult
 from python.ftutilities import *
 
 models : list[AEModel] = [
-    AEGANModel(), IdentityAE(), IdentityAE(), IdentityAE()
+    AEGANModel(), CAEModel(), IdentityAE(), IdentityAE()
 ]
 def main():
     # Init eel
