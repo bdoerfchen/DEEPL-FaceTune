@@ -3,11 +3,12 @@ from python.models.AEModel import AEModel
 from python.models.IdentityAE import IdentityAE 
 from python.models.AEGANModel import AEGANModel
 from python.models.CAEModel import CAEModel
+from python.models.vae.VariationalAE import VariationalAE
 from python.ModelResult import ModelResult
 from python.ftutilities import *
 
 models : list[AEModel] = [
-    AEGANModel(), CAEModel(), IdentityAE(), IdentityAE()
+    AEGANModel(), CAEModel(), VariationalAE(), IdentityAE()
 ]
 def main():
     # Init eel
@@ -23,16 +24,15 @@ def main():
 
 
 @eel.expose
-def decodeLatent(latentSpace) -> list:
+def decodeLatent(baseImage) -> list:
     """A function to en- and decode and image with all available models"""
-    #img = b64ToImage(baseImage)
-    print(latentSpace)
-    #result : list[ModelResult] = []
-#
-    #for model in models:
-    #    result.append(
-    #        ModelResult(model, img).result_b64
-    #    )
+    img = b64ToImage(baseImage)
+    result : list[ModelResult] = []
+
+    for model in models:
+       result.append(
+           ModelResult(model, img).result_b64
+       )
     return ""
 
 @eel.expose
