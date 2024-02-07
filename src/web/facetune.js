@@ -19,6 +19,19 @@ function getModelImgs() {
     ]
 }
 
+
+function setLatentSpace(file, model) {
+   var reader = new FileReader();
+   reader.onload = async function(event) {
+       latent = event.target.result;
+       //Upload image to python here
+       r = await eel.decodeLatent(latent + "")();
+       console.log(r)
+       targets = getModelImgs()[model - 1].element.setAttribute('src', r);
+    }
+   reader.readAsDataURL(file);
+}
+
 // Update image on preview
 document.getElementById('upload-img').addEventListener('change', function() {
     var file = this.files[0];
@@ -38,5 +51,33 @@ document.getElementById('upload-img').addEventListener('change', function() {
 
         }
         reader.readAsDataURL(file);
+    }
+});
+
+document.getElementById('upload-latent1').addEventListener('change', function() {
+    var file = this.files[0];
+    if (file) {
+        setLatentSpace(file,1)
+    }
+});
+
+document.getElementById('upload-latent2').addEventListener('change', function() {
+    var file = this.files[0];
+    if (file) {
+        setLatentSpace(file,2)
+    }
+});
+
+document.getElementById('upload-latent3').addEventListener('change', function() {
+    var file = this.files[0];
+    if (file) {
+        setLatentSpace(file,3)
+    }
+});
+
+document.getElementById('upload-latent4').addEventListener('change', function() {
+    var file = this.files[0];
+    if (file) {
+        setLatentSpace(file,4)
     }
 });

@@ -20,6 +20,21 @@ def main():
     # Start the index.html file 
     eel.start("index.html", mode=None)
 
+
+
+@eel.expose
+def decodeLatent(latentSpace) -> list:
+    """A function to en- and decode and image with all available models"""
+    #img = b64ToImage(baseImage)
+    print(latentSpace)
+    #result : list[ModelResult] = []
+#
+    #for model in models:
+    #    result.append(
+    #        ModelResult(model, img).result_b64
+    #    )
+    return ""
+
 @eel.expose
 def decodeImage(baseImage) -> list:
     """A function to en- and decode and image with all available models"""
