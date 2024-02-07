@@ -1,4 +1,4 @@
-from python.AEModel import AEModel
+from python.models.AEModel import AEModel
 
 
 class IdentityAE(AEModel):

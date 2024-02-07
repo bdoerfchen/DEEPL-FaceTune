@@ -1,22 +1,23 @@
-from AEModel import AEModel
-from AEGAN.lazarou.generative_model import AutoEncodingGenerativeAdversarialNetwork
+from python.models.AEModel import AEModel
+from python.models.AEGAN.lazarou.generative_model import AutoEncodingGenerativeAdversarialNetwork
 
 import numpy as np
 import cv2 as cv
+import matplotlib.pyplot as plt
 
 class AEGANModel(AEModel):
 
     def load(self) -> None:
         
-        encoder_path = "src/python/models/gcurrent.encoder.h5"
-        decoder_path = "src/python/models/gcurrent.generator.h5"
+        encoder_path = "src/python/models/AEGAN/gcurrent.encoder.h5"
+        decoder_path = "src/python/models/AEGAN/gcurrent.generator.h5"
         
         latent_dims = 64
 
         trained_aegan = AutoEncodingGenerativeAdversarialNetwork(
             image_shape=(64,64,3), 
             latent_dim=latent_dims, 
-            parameter_json_path='./AEGAN/params_64.json', 
+            parameter_json_path='src/python/models/AEGAN/params_64.json', 
             data_generating_function=lambda x: np.zeros((64,64,3), dtype=int),
             noise_generating_function=lambda x: np.random.normal(0, 1, (x, latent_dims)).astype(np.float32))
         
@@ -48,9 +49,11 @@ class AEGANModel(AEModel):
         """Decode the latent vector into an image"""
         
         # Generate output using the neural network model
-        output = self.aegan.generator.predict(latent)
+        
+        input = np.array(latent).reshape(1, -1)
+        output = self.aegan.generator.predict(input)
         # Rescale output to RGB values
-        output = np.clip((output+1) /2 , 0, 1).astype(np.float32)
+        output = np.clip((output/2+.5) * 255, 0, 255).astype(np.uint8)
         # Reshape output to image dimensions
         im = output.reshape(64, 64, 3)
         img = cv.resize(im, (256, 256))

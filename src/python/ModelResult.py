@@ -1,4 +1,4 @@
-from .AEModel import AEModel
+from .models.AEModel import AEModel
 from .ftutilities import imageToB64
 
 class ModelResult:
