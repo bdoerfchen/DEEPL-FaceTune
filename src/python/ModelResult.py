@@ -1,4 +1,5 @@
 from .AEModel import AEModel
+from .ftutilities import imageToB64
 
 class ModelResult:
 
@@ -6,3 +7,4 @@ class ModelResult:
         self.name = model.getName()
         self.encoding = model.encode(image)
         self.result = model.decode(self.encoding)
+        self.result_b64 = imageToB64(self.result)
