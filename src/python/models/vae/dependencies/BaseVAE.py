@@ -1,5 +1,5 @@
 import os
-from typing import Self
+#from typing import Self
 import keras
 from keras.utils import CustomObjectScope
 import tensorflow as tf
@@ -46,7 +46,7 @@ class BaseVAE(keras.models.Model):
         self.save(os.path.join(directory, file + ".keras"), save_format="keras")
         return
 
-    def load_from_directory(descriptor, directory: str, file = "vae") -> Self:
+    def load_from_directory(descriptor, directory: str, file = "vae"):
         assert os.path.exists(directory)
         vae = BaseVAE(descriptor)
         vae.load_weights(os.path.join(directory, file + ".keras"))

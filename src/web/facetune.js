@@ -69,7 +69,7 @@ document.getElementById('upload-latent').addEventListener('change', function() {
             latent_json = event.target.result;
             latent = JSON.parse(latent_json)
             buildSlider(latent)
-            changeLatentParameter(0);
+            changeLatentParameter(-1);
         }
         reader.readAsText(file);
     }
@@ -85,7 +85,7 @@ function openLatent(open, index) {
         eel.getEncoding(currentModelIndex, img)().then(latent => {
             console.log("latent", latent)
             buildSlider(latent);
-            changeLatentParameter(0);
+            changeLatentParameter(-1);
         })
 
     }
@@ -96,10 +96,14 @@ async function changeLatentParameter(index)
     decodedTarget = document.getElementById('latent-output-img')
 
     console.log(index)
-    value = document.getElementById("slider" + index).value;
-    currentLatent[index] = value;
 
+    if (index > 0)
+    {
+        value = document.getElementById("slider" + index).value;
+        currentLatent[index] = value;
+    }
     //Get new image
+    console.log(currentLatent)
     img = await eel.decodeLatentEncoding(currentModelIndex, currentLatent)();
     decodedTarget.src = img;
     updateDownloadLink();
@@ -137,9 +141,4 @@ function updateDownloadLink(){
     downloadAnchorNode.setAttribute("download", "latent.json");
   }
 
-document.getElementById('upload-latent1').addEventListener('change', function() {
-    var file = this.files[0];
-    if (file) {
-        setLatentSpace(file,1)
-    }
-});
+
