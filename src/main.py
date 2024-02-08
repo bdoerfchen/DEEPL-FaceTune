@@ -8,7 +8,7 @@ from python.ModelResult import ModelResult
 from python.ftutilities import *
 
 models : list[AEModel] = [
-    AEGANModel(), CAEModel(), VariationalAE(), IdentityAE()
+    AEGANModel(), CAEModel((256, 256)), IdentityAE(), IdentityAE()
 ]
 def main():
     # Init eel
@@ -19,21 +19,10 @@ def main():
         model.load()
 
     # Start the index.html file 
+    print("Starting server")
     eel.start("index.html", mode=None)
 
 
-
-@eel.expose
-def decodeLatent(baseImage) -> list:
-    """A function to en- and decode and image with all available models"""
-    img = b64ToImage(baseImage)
-    result : list[ModelResult] = []
-
-    for model in models:
-       result.append(
-           ModelResult(model, img).result_b64
-       )
-    return ""
 
 @eel.expose
 def decodeImage(baseImage) -> list:
@@ -49,16 +38,19 @@ def decodeImage(baseImage) -> list:
     return result
 
 @eel.expose
-def decodeLatentEncoding(name, encoding):
-    assert isinstance(encoding, list)
-
-    model = [m for m in models if m.getName() == name]
-    assert len(model) == 1
-    model = model[0]
-
+def decodeLatentEncoding(index, encoding):
+    model = models[index]
+    encoding = list(map(lambda x: float(x), encoding))
     resultImage = model.decode(encoding)
     b64string = imageToB64(resultImage)
     return b64string
+
+@eel.expose
+def getEncoding(index, imgB64):
+    model = models[index]
+    img = b64ToImage(imgB64)
+    latent = np.array(model.encode(img)).tolist()
+    return latent
 
 
 if __name__ == "__main__":

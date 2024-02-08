@@ -1,3 +1,11 @@
 .clickable {
     cursor: pointer;
 }
+
+.non-clickable {
+    cursor: not-allowed;
+}
+
+.hidden {
+    display: none;
+}

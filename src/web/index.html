@@ -26,53 +26,73 @@
         </header>
         <main class="mdl-layout__content">
             <div class="page-content">
-                <!-- Your content goes here -->
+                <div id="page-main">
+                    <!-- Your content goes here -->
 
-                <div class="mdl-grid">
-                    <div class="mdl-cell mdl-cell--4-col">
-                        <!-- Select picture -->
-                        <img src="https://placehold.co/256x256" width="256" height="256" id="preview-img">
-                        <input id="upload-img" type="file">
-                    </div>
-
-                    <div class="mdl-cell mdl-cell--6-col">
-                        <!-- Show reconstruction picture -->
-                        <div class="mdl-grid">
-                            <div class="mdl-cell mdl-cell--6-col">
-                                <div>
-                                    <img id="model1-img" src="https://placehold.co/256x256" class="clickable" title="Modify model">
-                                    <label>Model 1</label>
-                                    <input id="upload-latent1" type="file">
-                                </div>
-                            </div>
-                            <div class="mdl-cell mdl-cell--6-col">
-                                <div>
-                                    <img id="model2-img" src="https://placehold.co/256x256" class="clickable" title="Modify model">
-                                    <label>Model 2</label>
-                                    <input id="upload-latent2" type="file">
-                                </div>
-                            </div>
+                    <div class="mdl-grid">
+                        <div class="mdl-cell mdl-cell--4-col">
+                            <!-- Select picture -->
+                            <img src="https://placehold.co/256x256" width="256" height="256" id="preview-img">
+                            <input id="upload-img" type="file">
                         </div>
 
-                        <div class="mdl-grid">
-                            <div class="mdl-cell mdl-cell--6-col">
-                                <div>
-                                    <img id="model3-img" src="https://placehold.co/256x256" class="clickable" title="Modify model">
-                                    <label>Model 3</label>
-                                    <input id="upload-latent3" type="file">
+                        <div class="mdl-cell mdl-cell--8-col">
+                            <!-- Show reconstruction picture -->
+                            <div class="mdl-grid">
+                                <div class="mdl-cell mdl-cell--6-col">
+                                    <div>
+                                        <img id="model1-img" src="https://placehold.co/256x256" class="clickable"
+                                            title="Modify model" onclick="openLatent(true, 0)">
+                                        <label>AEGAN</label>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--6-col">
+                                    <div>
+                                        <img id="model2-img" src="https://placehold.co/256x256" class="non-clickable"
+                                            title="Modify model">
+                                        <label>CAE</label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="mdl-cell mdl-cell--6-col">
-                                <div>
-                                    <img id="model4-img" src="https://placehold.co/256x256" class="clickable" title="Modify model">
-                                    <label>Model 4</label>
-                                    <input id="upload-latent4" type="file">
+
+                            <div class="mdl-grid">
+                                <div class="mdl-cell mdl-cell--6-col">
+                                    <div>
+                                        <img id="model3-img" src="https://placehold.co/256x256" class="non-clickable"
+                                            title="Modify model">
+                                        <label>VAE</label>
+                                    </div>
+                                </div>
+                                <div class="mdl-cell mdl-cell--6-col">
+                                    <div>
+                                        <img id="model4-img" src="https://placehold.co/256x256" class="non-clickable"
+                                            title="Modify model">
+                                        <label>ALAE</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <div id="page-slider" class="hidden">
+                    <button class="mdl-button mdl-js-button mdl-button--raised" onclick="openLatent(false, 0)">
+                        Return
+                    </button>
+                    <div class="mdl-grid">
+                        <div class="mdl-cell mdl-cell--8-col">
+                            <p id="slider-container">
+                                <!-- <input type="range" id="s1" min="0" max="10" value="4" step="2"> -->
+                            </p>
+                        </div>
+
+                        <div class="mdl-cell mdl-cell--4-col">
+                            <img src="https://placehold.co/256x256" width="256" height="256" id="latent-output-img">
+                            <a id="download-latent">Download latent</a>
+                            <input id="upload-latent" type="file">
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
