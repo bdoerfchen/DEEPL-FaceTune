@@ -33,7 +33,8 @@
                         <div class="mdl-cell mdl-cell--4-col">
                             <!-- Select picture -->
                             <img src="https://placehold.co/256x256" width="256" height="256" id="preview-img">
-                            <input id="upload-img" type="file">
+                            <button style="display:block;width:120px; height:30px;" onclick="document.getElementById('upload-img').click()">Upload Image</button>
+                            <input id="upload-img" class="hidden" type="file">
                         </div>
 
                         <div class="mdl-cell mdl-cell--8-col">
@@ -48,8 +49,8 @@
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col">
                                     <div>
-                                        <img id="model2-img" src="https://placehold.co/256x256" class="non-clickable"
-                                            title="Modify model">
+                                        <img id="model2-img" src="https://placehold.co/256x256" class="clickable"
+                                            title="Modify model" onclick="openLatent(true, 1)">
                                         <label>CAE</label>
                                     </div>
                                 </div>
@@ -88,8 +89,13 @@
 
                         <div class="mdl-cell mdl-cell--4-col">
                             <img src="https://placehold.co/256x256" width="256" height="256" id="latent-output-img">
-                            <a id="download-latent">Download latent</a>
-                            <input id="upload-latent" type="file">
+                            <div>
+                             <button style="display:block;width:120px; height:30px;" onclick="document.getElementById('download-latent').click()">Export latent</button>
+                             <a id="download-latent" class="hidden">Download latent</a>
+
+                             <button style="display:block;width:120px; height:30px;" onclick="document.getElementById('upload-latent').click()">Import latent</button>
+                             <input id="upload-latent" class="hidden" type="file">
+                            </div>
                         </div>
                     </div>
                 </div>

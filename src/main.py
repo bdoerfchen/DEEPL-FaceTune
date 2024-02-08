@@ -40,7 +40,9 @@ def decodeImage(baseImage) -> list:
 @eel.expose
 def decodeLatentEncoding(index, encoding):
     model = models[index]
-    encoding = list(map(lambda x: float(x), encoding))
+
+    encoding = np.array(encoding).astype(np.float32)
+    #encoding = list(map(lambda x: float(x), encoding))
     resultImage = model.decode(encoding)
     b64string = imageToB64(resultImage)
     return b64string
