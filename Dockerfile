@@ -11,6 +11,6 @@ RUN pip install \
 COPY . .
 
 EXPOSE 8000
-HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 CMD [ "curl", "localhost:8000/" ]
+HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 CMD [ "curl", "localhost:8080/" ]
 USER 1000
 ENTRYPOINT [ "python3.11", "-u", "src/main.py" ]

@@ -26,8 +26,8 @@ def main():
     print("All models initialized")
 
     # Start the index.html file 
-    print("Starting server")
-    eel.start("index.html", mode=None)
+    print("Starting server on :8080")
+    eel.start("index.html", mode=None, host='0.0.0.0', port=8080)
 
 
 

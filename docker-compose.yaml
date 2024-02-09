@@ -4,4 +4,4 @@ services:
     build: .
     image: facetune:1.0
     ports:
-      - "5080:8000"
+      - "5080:8080"
