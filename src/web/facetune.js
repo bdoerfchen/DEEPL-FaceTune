@@ -141,4 +141,5 @@ function updateDownloadLink(){
     downloadAnchorNode.setAttribute("download", "latent.json");
   }
 
-
+//Log connection on eel server
+eel.logConnection()()

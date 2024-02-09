@@ -5,3 +5,4 @@ services:
     image: facetune:1.0
     ports:
       - "5080:8080"
+    restart: always

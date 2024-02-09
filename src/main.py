@@ -1,6 +1,12 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Silence tensorflow
+
 print("Started FaceTune")
 
 import eel 
+from datetime import datetime
+
+import tensorflow as tf
 from python.models.AEModel import AEModel
 from python.models.IdentityAE import IdentityAE 
 from python.models.AEGANModel import AEGANModel
@@ -8,6 +14,8 @@ from python.models.CAEModel import CAEModel
 from python.models.vae.VariationalAE import VariationalAE
 from python.ModelResult import ModelResult
 from python.ftutilities import *
+tf.keras.utils.disable_interactive_logging()  # Silence keras
+
 print("Imported modules")
 
 models : list[AEModel] = [
@@ -60,6 +68,10 @@ def getEncoding(index, imgB64):
     img = b64ToImage(imgB64)
     latent = np.array(model.encode(img)).tolist()
     return latent
+
+@eel.expose
+def logConnection():
+    print("\t", datetime.now().isoformat() + ": New connection established")
 
 if __name__ == "__main__":
     main()
