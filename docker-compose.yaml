@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  ft-webapp:
+    build: .
+    image: facetune:1.0
+    ports:
+      - "5080:8000"

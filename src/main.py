@@ -1,3 +1,5 @@
+print("Started FaceTune")
+
 import eel 
 from python.models.AEModel import AEModel
 from python.models.IdentityAE import IdentityAE 
@@ -6,6 +8,7 @@ from python.models.CAEModel import CAEModel
 from python.models.vae.VariationalAE import VariationalAE
 from python.ModelResult import ModelResult
 from python.ftutilities import *
+print("Imported modules")
 
 models : list[AEModel] = [
     AEGANModel(), CAEModel((256, 256)), IdentityAE(), IdentityAE()
@@ -13,10 +16,14 @@ models : list[AEModel] = [
 def main():
     # Init eel
     eel.init("./src/web")          
+    print("Initialized webserver")
 
     # Load and init models
+    print("Initializing models")
     for model in models:
         model.load()
+        print("\tInitialized", model.getName())
+    print("All models initialized")
 
     # Start the index.html file 
     print("Starting server")
@@ -54,6 +61,7 @@ def getEncoding(index, imgB64):
     latent = np.array(model.encode(img)).tolist()
     return latent
 
-
 if __name__ == "__main__":
     main()
+
+print("Stopping application")
