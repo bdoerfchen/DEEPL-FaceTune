@@ -19,7 +19,10 @@ tf.keras.utils.disable_interactive_logging()  # Silence keras
 print("Imported modules")
 
 models : list[AEModel] = [
-    AEGANModel(), CAEModel((256, 256)), IdentityAE(), IdentityAE()
+    AEGANModel(), 
+    CAEModel((256, 256)), 
+    VariationalAE() if VariationalAE.isModelAvailable() else IdentityAE(), # Only load VAE if the model file is available
+    IdentityAE()
 ]
 def main():
     # Init eel

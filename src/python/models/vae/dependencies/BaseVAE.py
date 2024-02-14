@@ -1,16 +1,17 @@
 import os
-#from typing import Self
 import keras
 from keras.utils import CustomObjectScope
 import tensorflow as tf
 import numpy as np
 import jsonpickle
 
-from variants.VAEDescriptor import VAEDescriptor
+from .variants.VAEDescriptor import VAEDescriptor
 
-from variants.layers.KLDivergenceLayer import KLDivergenceLossLayer
-from variants.layers.MSEReconstructionLossLayer import MSEReconstructionLossLayer
-from variants.layers.SamplingLayer import VAESamplingLayer
+from .variants.layers.KLDivergenceLayer import KLDivergenceLossLayer
+from .variants.layers.MSEReconstructionLossLayer import MSEReconstructionLossLayer
+from .variants.layers.SamplingLayer import VAESamplingLayer
+
+from .variants.DenseVAEDescriptor import DenseVAEDescriptor
 
 
 # Some influences by https://blog.paperspace.com/how-to-build-variational-autoencoder-keras/
@@ -48,7 +49,7 @@ class BaseVAE(keras.models.Model):
         keras.saving.save_model(self, filepath, save_format="keras")
         return
 
-    def load_from_directory(directory: str, file = "vae") -> Self:
+    def load_from_directory(directory: str, file = "vae"):
         assert os.path.exists(directory)
         filepath = os.path.join(directory, file + ".keras")
         with CustomObjectScope({
@@ -57,7 +58,7 @@ class BaseVAE(keras.models.Model):
             'MSEReconstructionLossLayer': MSEReconstructionLossLayer,
             'VAESamplingLayer': VAESamplingLayer
         }):
-            vae = keras.saving.load_model(filepath)
+            vae = keras.saving.load_model(filepath, compile=False)
             return vae
     
     def get_config(self):
@@ -71,5 +72,6 @@ class BaseVAE(keras.models.Model):
     @classmethod
     def from_config(cls, config):
         descriptor_json = config.pop('descriptor')
-        descriptor = jsonpickle.decode(descriptor_json)
+        DenseVAEDescriptor.__module__ = "variants.DenseVAEDescriptor" #Trick jsonpickle by renaming module to how it was saved as, which enables finding and loading
+        descriptor = jsonpickle.decode(descriptor_json, classes=DenseVAEDescriptor)
         return cls(descriptor, **config)

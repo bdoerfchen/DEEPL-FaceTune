@@ -6,6 +6,7 @@ WORKDIR /app
 RUN pip install \
             eel \
             opencv-python-headless \
+            jsonpickle \
             pillow \
             numpy \
             tensorflow==2.15.0 \
