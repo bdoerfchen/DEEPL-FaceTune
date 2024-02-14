@@ -3,7 +3,7 @@ from python.models.AEGAN.lazarou.generative_model import AutoEncodingGenerativeA
 
 import numpy as np
 import cv2 as cv
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 class AEGANModel(AEModel):
 

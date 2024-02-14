@@ -1,5 +1,5 @@
 import os
-from typing import Self
+#from typing import Self
 import keras
 from keras.utils import CustomObjectScope
 import tensorflow as tf

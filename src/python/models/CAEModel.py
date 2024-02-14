@@ -5,6 +5,10 @@ import numpy as np
 class CAEModel(AEModel):
     model = None
 
+
+    def __init__(self, img_size):
+        self.img_size = img_size
+
     def load(self) -> None:
         model_path = "src/python/models/CAE/BestQualityCAE.tf"
         self.model = keras.models.load_model(model_path)
@@ -12,7 +16,7 @@ class CAEModel(AEModel):
     def getName(self) -> str:
         """Return the name of the model"""
         return "Convolutional Autoencoder"
-    
+
     def encode(self, img) -> list[float]:
         """Encode an image and return the latent encoding vector"""
 
@@ -27,11 +31,10 @@ class CAEModel(AEModel):
         # Encode Image
         encoded = self.model.encoder.predict(wrapper)[0]
         return encoded
-    
+
     def decode(self, latent: list[float]) -> []:
-        """Decode the latent vector into an image"""
-        
-        # Wrap Latent Space in Array
+
+
         wrapper = np.array([latent])
 
         # Decode Image
@@ -42,5 +45,5 @@ class CAEModel(AEModel):
 
         # Convert Pixel Data to Bytes
         img = np.clip(img,0,255).astype(np.uint8)
-
+        img = cv.resize(img, self.img_size)
         return img

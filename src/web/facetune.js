@@ -1,3 +1,8 @@
+pageMain = document.getElementById('page-main')
+pageSlider = document.getElementById('page-slider')
+currentLatent = Array(64).fill(0)
+currentModelIndex = 0
+
 function getModelImgs() {
     return [
         {
@@ -19,7 +24,6 @@ function getModelImgs() {
     ]
 }
 
-
 function setLatentSpace(file, model) {
    var reader = new FileReader();
    reader.onload = async function(event) {
@@ -31,6 +35,8 @@ function setLatentSpace(file, model) {
     }
    reader.readAsDataURL(file);
 }
+
+
 
 // Update image on preview
 document.getElementById('upload-img').addEventListener('change', function() {
@@ -54,30 +60,86 @@ document.getElementById('upload-img').addEventListener('change', function() {
     }
 });
 
-document.getElementById('upload-latent1').addEventListener('change', function() {
+// Update latent vector
+document.getElementById('upload-latent').addEventListener('change', function() {
     var file = this.files[0];
     if (file) {
-        setLatentSpace(file,1)
+        var reader = new FileReader();
+        reader.onload = async function(event) {
+            latent_json = event.target.result;
+            latent = JSON.parse(latent_json)
+            buildSlider(latent)
+            changeLatentParameter(-1);
+        }
+        reader.readAsText(file);
     }
 });
 
-document.getElementById('upload-latent2').addEventListener('change', function() {
-    var file = this.files[0];
-    if (file) {
-        setLatentSpace(file,2)
-    }
-});
+function openLatent(open, index) {
+    pageMain.classList.toggle('hidden')
+    pageSlider.classList.toggle('hidden')
 
-document.getElementById('upload-latent3').addEventListener('change', function() {
-    var file = this.files[0];
-    if (file) {
-        setLatentSpace(file,3)
-    }
-});
+    if (open) {
+        currentModelIndex = index
+        img = document.getElementById('preview-img').src
+        eel.getEncoding(currentModelIndex, img)().then(latent => {
+            console.log("latent", latent)
+            buildSlider(latent);
+            changeLatentParameter(-1);
+        })
 
-document.getElementById('upload-latent4').addEventListener('change', function() {
-    var file = this.files[0];
-    if (file) {
-        setLatentSpace(file,4)
     }
-});
+}
+
+async function changeLatentParameter(index)
+{
+    decodedTarget = document.getElementById('latent-output-img')
+
+    console.log(index)
+
+    if (index > 0)
+    {
+        value = document.getElementById("slider" + index).value;
+        currentLatent[index] = value;
+    }
+    //Get new image
+    console.log(currentLatent)
+    img = await eel.decodeLatentEncoding(currentModelIndex, currentLatent)();
+    decodedTarget.src = img;
+    updateDownloadLink();
+}
+
+function buildSlider(latent) {
+    currentLatent = latent
+
+    lockSlider = currentModelIndex == 1
+
+    sliderContainer = document.getElementById("slider-container")
+    sliderContainer.innerHTML = "";
+    for (let i = 0; i < 64; i++)
+    {
+        newSlider = document.createElement('input')
+        // <input type="range" id="s1" min="0" max="10" value="4" step="2">
+        newSlider.type = "range";
+        newSlider.min = -5;
+        newSlider.max = 5;
+        newSlider.value = lockSlider ? 0 : currentLatent[i];
+        newSlider.step = 0.05;
+        newSlider.id = "slider" + i;
+        newSlider.disabled = lockSlider;
+        newSlider.addEventListener('change', async function() { await changeLatentParameter(i) });
+
+        sliderContainer.appendChild(newSlider);
+    }
+
+}
+
+function updateDownloadLink(){
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentLatent));
+    downloadAnchorNode = document.getElementById('download-latent')
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "latent.json");
+  }
+
+//Log connection on eel server
+eel.logConnection()()
