@@ -17,8 +17,8 @@ class VariationalAE(AEModel):
         return "VAE"
     
     def load(self) -> None:        
-        d = DenseVAEDescriptor((256, 256, 3), [100], 16, 1/4)
-        BaseVAE.load_from_directory(d, VariationalAE.MODEL_DIRPATH)
+        d = DenseVAEDescriptor((256, 256, 3), [300, 100], 16, 1/4)
+        self.model = BaseVAE.load_from_directory(d, VariationalAE.MODEL_DIRPATH)
 
     def expects_shape() -> tuple:
         return (256, 256, 3)

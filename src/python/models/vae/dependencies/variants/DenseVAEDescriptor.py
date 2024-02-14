@@ -10,17 +10,16 @@ class DenseVAEDescriptor(VAEDescriptor):
         """ Creating a new Dense-Descriptor instance.
 
         Args:
-            img_shape: shape of the input image (height, width, channels)
-            encoder_layer_units: list of units per each layer. Will be mirrored
-            latent_size: Number of parameters in latent layer
-            resize_factor: Factor to resize input image. Should be 1/2^x for any x>=0 to avoid down- and upscaling problems
-            resize_interpolation_method: The method for resizing. Can be one of the following: ["bilinear", "nearest", "bicubic", "area", "lanczos3", "lanczos5", "gaussian", "mitchellcubic"]
+            img_shape (tuple): shape of the input image (height, width, channels)
+            encoder_layer_units (list): list of units per each layer. Will be mirrored
+            latent_size (int): Number of parameters in latent layer
+            resize_factor (float): Factor to resize input image. Should be 1/2^x for any x>=0 to avoid down- and upscaling problems
+            resize_interpolation_method (str): The method for resizing. Can be one of the following: ["bilinear", "nearest", "bicubic", "area", "lanczos3", "lanczos5", "gaussian", "mitchellcubic"]
         """
 
-        assert len(img_shape) == 3, "Expecting image shape with height, width, n_channels"
         assert len(encoder_layer_units) > 0, "Expecting at least one dense layer"
         assert latent_size > 0, "Expecting at least one parameter in latent layer"
-        assert resize_factor <= 1, "Can not upscale image"
+        assert resize_factor <= 1, "Descriptor will not upscale image"
 
         self.img_shape = img_shape
         self.encoder_layer_units = encoder_layer_units
@@ -28,7 +27,9 @@ class DenseVAEDescriptor(VAEDescriptor):
         self.resize_factor = resize_factor
         self.interpolation = resize_interpolation_method
 
-    def createModel(self) -> (keras.models.Model, keras.models.Model):
+    def createModel(self) -> tuple[keras.models.Model, keras.models.Model]:
+        # Doc comment is provided by base class
+
         img_shape = self.img_shape
         encoder_layer_units = self.encoder_layer_units
         latent_size = self.latent_size

@@ -4,9 +4,9 @@ HSB DEEPL WS23/24 Project: Autoencoder based face manipulation
 
 ## Setup
 
-Install the eel module:
+Install modules:
 
-    pip install eel
+    pip install eel numpy pillow tensorflow==2.15.0 keras==2.15.0
 
 ## Start
 

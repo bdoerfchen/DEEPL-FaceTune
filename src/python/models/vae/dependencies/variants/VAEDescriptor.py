@@ -7,7 +7,7 @@ class VAEDescriptor:
     def __init__(self) -> None:
         pass
 
-    def createModel(self) -> (keras.models.Model, keras.models.Model):
+    def createModel(self) -> tuple[keras.models.Model, keras.models.Model]:
         """Creates and returns the encoder and decoder.
 
         Info:

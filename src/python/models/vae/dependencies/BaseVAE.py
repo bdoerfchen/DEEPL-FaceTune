@@ -4,15 +4,16 @@ import keras
 from keras.utils import CustomObjectScope
 import tensorflow as tf
 import numpy as np
+import jsonpickle
 
-from .VAEDescriptor import VAEDescriptor
+from variants.VAEDescriptor import VAEDescriptor
 
-from .layers.KLDivergenceLayer import KLDivergenceLossLayer
-from .layers.MSEReconstructionLossLayer import MSEReconstructionLossLayer
-from .layers.SamplingLayer import VAESamplingLayer
+from variants.layers.KLDivergenceLayer import KLDivergenceLossLayer
+from variants.layers.MSEReconstructionLossLayer import MSEReconstructionLossLayer
+from variants.layers.SamplingLayer import VAESamplingLayer
 
 
-# https://blog.paperspace.com/how-to-build-variational-autoencoder-keras/
+# Some influences by https://blog.paperspace.com/how-to-build-variational-autoencoder-keras/
 
 
 class BaseVAE(keras.models.Model):
@@ -28,11 +29,11 @@ class BaseVAE(keras.models.Model):
             descriptor (VAEDescriptor): An object describing the structure of the model, determines the kind of VAE
             name (str): The name of the model
         """
+        self.descriptor = descriptor                    # Save descriptor
+        encoder, decoder = descriptor.createModel()     # Use descriptor to create encoder and decoder model
 
-        encoder, decoder = descriptor.createModel()
-
-        #   -------
-        #   [ VAE ]
+        # Construct the internal structure with the encoder and decoder models
+        # It is: input -> encoder -> latent space -> sampled latent space -> decoder -> (add mse) -> output
         vae_input = encoder.input
         vae_latent = encoder(vae_input)
         vae_latent_sampled = VAESamplingLayer(name="vae_latent_sampled")(vae_latent)
@@ -43,11 +44,32 @@ class BaseVAE(keras.models.Model):
         return
 
     def save_to_directory(self, directory, file = "vae") -> None:
-        self.save(os.path.join(directory, file + ".keras"), save_format="keras")
+        filepath = os.path.join(directory, file + ".keras")
+        keras.saving.save_model(self, filepath, save_format="keras")
         return
 
-    def load_from_directory(descriptor, directory: str, file = "vae") -> Self:
+    def load_from_directory(directory: str, file = "vae") -> Self:
         assert os.path.exists(directory)
-        vae = BaseVAE(descriptor)
-        vae.load_weights(os.path.join(directory, file + ".keras"))
-        return vae
+        filepath = os.path.join(directory, file + ".keras")
+        with CustomObjectScope({
+            'BaseVAE': BaseVAE,
+            'KLDivergenceLossLayer': KLDivergenceLossLayer,
+            'MSEReconstructionLossLayer': MSEReconstructionLossLayer,
+            'VAESamplingLayer': VAESamplingLayer
+        }):
+            vae = keras.saving.load_model(filepath)
+            return vae
+    
+    def get_config(self):
+        super_config = super().get_config()
+        d_json = jsonpickle.encode(self.descriptor)
+        return {
+            'descriptor': d_json,
+            **super_config
+        }
+    
+    @classmethod
+    def from_config(cls, config):
+        descriptor_json = config.pop('descriptor')
+        descriptor = jsonpickle.decode(descriptor_json)
+        return cls(descriptor, **config)
