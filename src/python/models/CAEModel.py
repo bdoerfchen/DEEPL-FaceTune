@@ -1,3 +1,5 @@
+## Author: Simon Pfennig
+
 from python.models.AEModel import AEModel
 import keras
 import cv2 as cv

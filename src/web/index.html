@@ -1,3 +1,5 @@
+<!-- Author: Benjamin Bissendorf and Simon Pfennig-->
+
 <html>
 
 <head>
@@ -27,7 +29,7 @@
         <main class="mdl-layout__content">
             <div class="page-content">
                 <div id="page-main">
-                    <!-- Your content goes here -->
+                    <!-- Main page for infering the input image on all models -->
 
                     <div class="mdl-grid">
                         <div class="mdl-cell mdl-cell--4-col">
@@ -43,14 +45,14 @@
                                 <div class="mdl-cell mdl-cell--6-col">
                                     <div>
                                         <img id="model1-img" src="https://placehold.co/256x256" class="clickable"
-                                            title="Modify model" onclick="openLatent(true, 0)">
+                                            title="Modify latent space" onclick="openLatent(true, 0)">
                                         <label>AEGAN</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col">
                                     <div>
                                         <img id="model2-img" src="https://placehold.co/256x256" class="clickable"
-                                            title="Modify model" onclick="openLatent(true, 1)">
+                                            title="Modify latent space" onclick="openLatent(true, 1)">
                                         <label>CAE</label>
                                     </div>
                                 </div>
@@ -60,14 +62,14 @@
                                 <div class="mdl-cell mdl-cell--6-col">
                                     <div>
                                         <img id="model3-img" src="https://placehold.co/256x256" class="clickable"
-                                            title="Modify model" onclick="openLatent(true, 2)">
+                                            title="Modify latent space" onclick="openLatent(true, 2)">
                                         <label>VAE</label>
                                     </div>
                                 </div>
                                 <div class="mdl-cell mdl-cell--6-col">
                                     <div>
                                         <img id="model4-img" src="https://placehold.co/256x256" class="non-clickable"
-                                            title="Modify model">
+                                            title="Not available">
                                         <label>ALAE</label>
                                     </div>
                                 </div>
@@ -77,6 +79,7 @@
                 </div>
 
                 <div id="page-slider" class="hidden">
+                    <!-- The second page to change the latent vector -->
                     <button class="mdl-button mdl-js-button mdl-button--raised" onclick="openLatent(false, 0)">
                         Return
                     </button>

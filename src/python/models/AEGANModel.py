@@ -1,3 +1,5 @@
+## Author: Niklas Seeliger
+
 from python.models.AEModel import AEModel
 from python.models.AEGAN.lazarou.generative_model import AutoEncodingGenerativeAdversarialNetwork
 

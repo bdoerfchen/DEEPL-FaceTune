@@ -1,3 +1,5 @@
+## Author: Benjamin Bissendorf
+
 class AEModel:
     """Base class for autoencoder models to inherit from. Will be used to encode and decode images"""
 

@@ -1,3 +1,5 @@
+## Author: Benjamin Bissendorf
+
 import os
 import tensorflow as tf
 import keras
@@ -26,8 +28,8 @@ class VariationalAE(AEModel):
         img_i = np.reshape(img_i, (1, 256, 256, 3))
 
         # Encode and sample
-        latent = self.model.encoder(img_i)
-        sampled_latent = self.model.layers[2](latent)
+        latent = self.model.encoder(img_i) # Encode
+        sampled_latent = self.model.layers[2](latent) # Sample
 
         # Reshape and return
         latent_reshape = np.reshape(sampled_latent, sampled_latent.shape[1:])
@@ -40,9 +42,9 @@ class VariationalAE(AEModel):
         result = self.model.decoder(latent_i)
 
         # process output
-        result_img = np.multiply(result, 255)
-        result_img = result_img.astype(np.uint8)
-        result_img = np.reshape(result_img, result_img.shape[1:])
+        result_img = np.multiply(result, 255) # Denormalize
+        result_img = result_img.astype(np.uint8) # To discrete values (uint8)
+        result_img = np.reshape(result_img, result_img.shape[1:]) # Reshaping
         return result_img
     
     def isModelAvailable() -> bool:

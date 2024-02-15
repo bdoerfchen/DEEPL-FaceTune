@@ -1,8 +1,11 @@
+// Authors: Benjamin Bissendorf and Simon Pfennig
+
 pageMain = document.getElementById('page-main')
 pageSlider = document.getElementById('page-slider')
 currentLatent = Array(64).fill(0)
 currentModelIndex = 0
 
+//Function to get all img elements of the models
 function getModelImgs() {
     return [
         {
@@ -38,7 +41,7 @@ function setLatentSpace(file, model) {
 
 
 
-// Update image on preview
+// When new image is uploaded, infere and update model result images
 document.getElementById('upload-img').addEventListener('change', function() {
     var file = this.files[0];
     if (file) {
@@ -46,12 +49,13 @@ document.getElementById('upload-img').addEventListener('change', function() {
         reader.onload = async function(event) {
             image = event.target.result;
             document.getElementById('preview-img').setAttribute('src', image);
-            //Upload image to python here
+            //Uploads source image to python and gets the four result images
             r = await eel.decodeImage(image + "")();
             console.log(r)
             targets = getModelImgs();
             for (let i = 0; i < 4; i++)
             {
+                //Apply result image
                 targets[i].element.setAttribute('src', r[i])
             }
 
@@ -60,7 +64,7 @@ document.getElementById('upload-img').addEventListener('change', function() {
     }
 });
 
-// Update latent vector
+// When new latent vector is uploaded, update sliders and target image
 document.getElementById('upload-latent').addEventListener('change', function() {
     var file = this.files[0];
     if (file) {
@@ -75,6 +79,7 @@ document.getElementById('upload-latent').addEventListener('change', function() {
     }
 });
 
+// Open the modify latent space page
 function openLatent(open, index) {
     pageMain.classList.toggle('hidden')
     pageSlider.classList.toggle('hidden')
@@ -82,6 +87,7 @@ function openLatent(open, index) {
     if (open) {
         currentModelIndex = index
         img = document.getElementById('preview-img').src
+        //Download latent vector for current image, then build the sliders and update the target image
         eel.getEncoding(currentModelIndex, img)().then(latent => {
             console.log("latent", latent)
             buildSlider(latent);
@@ -91,35 +97,37 @@ function openLatent(open, index) {
     }
 }
 
+// Function to change a latent parameter and update the target image
+// Use an index < 0 to only update the target image with the current latent space
 async function changeLatentParameter(index)
 {
+    //Get target img
     decodedTarget = document.getElementById('latent-output-img')
 
-    console.log(index)
-
-    if (index > 0)
+    //Change parameter if index >= 0, if -1 only used for updating the target image
+    if (index >= 0)
     {
         value = document.getElementById("slider" + index).value;
         currentLatent[index] = value;
     }
-    //Get new image
-    console.log(currentLatent)
+    //Get new image and apply
     img = await eel.decodeLatentEncoding(currentModelIndex, currentLatent)();
     decodedTarget.src = img;
     updateDownloadLink();
 }
 
+// Function to insert all sliders for the latent parameters 
 function buildSlider(latent) {
     currentLatent = latent
 
-    lockSlider = currentModelIndex == 1
+    lockSlider = currentModelIndex == 1 //Lock sliders for the CAE
 
     sliderContainer = document.getElementById("slider-container")
     sliderContainer.innerHTML = "";
     for (let i = 0; i < 64; i++)
     {
         newSlider = document.createElement('input')
-        // <input type="range" id="s1" min="0" max="10" value="4" step="2">
+        // <input type="range" id="s1" min="0" max="10" value="4" step="2"> //Target HTML element
         newSlider.type = "range";
         newSlider.min = -5;
         newSlider.max = 5;
@@ -134,6 +142,7 @@ function buildSlider(latent) {
 
 }
 
+// Function to update the latent vector base64 download link
 function updateDownloadLink(){
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentLatent));
     downloadAnchorNode = document.getElementById('download-latent')
@@ -141,5 +150,5 @@ function updateDownloadLink(){
     downloadAnchorNode.setAttribute("download", "latent.json");
   }
 
-//Log connection on eel server
+// Log connection on eel server, when page is opened
 eel.logConnection()()
