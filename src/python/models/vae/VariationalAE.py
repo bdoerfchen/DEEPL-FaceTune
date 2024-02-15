@@ -21,25 +21,23 @@ class VariationalAE(AEModel):
     def encode(self, img) -> list[float]:
         assert img.shape == (256, 256, 3)
 
-        #Bild normalisieren
+        # Normalize image
         img_i = np.multiply(img, 1/255)
-        img_i = np.reshape(img, (1, 256, 256, 3))
+        img_i = np.reshape(img_i, (1, 256, 256, 3))
 
-        # extract layers and pass-forward
-        l_input = self.model.layers[0]
-        l_encode = self.model.layers[1]
-        l_sample = self.model.layers[2]
-        latent = l_sample(l_encode(l_input(img_i)))
-        latent_reshape = np.reshape(latent, latent.shape[1:])
+        # Encode and sample
+        latent = self.model.encoder(img_i)
+        sampled_latent = self.model.layers[2](latent)
+
+        # Reshape and return
+        latent_reshape = np.reshape(sampled_latent, sampled_latent.shape[1:])
         return latent_reshape
     
     def decode(self, latent: list[float]) -> list:
         # reshape
         latent_i = np.reshape(latent, (1, len(latent)))
 
-        # extract layers and pass-forward
-        l_decode = self.model.layers[3]
-        result = l_decode(latent_i)
+        result = self.model.decoder(latent_i)
 
         # process output
         result_img = np.multiply(result, 255)

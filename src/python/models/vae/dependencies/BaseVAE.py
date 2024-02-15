@@ -41,7 +41,10 @@ class BaseVAE(keras.models.Model):
         vae_decoder_output = decoder(vae_latent_sampled)
         vae_mse_output = MSEReconstructionLossLayer(name="mse_vae_output")([vae_input, vae_decoder_output])
 
+
         super().__init__(vae_input, vae_mse_output, name=name)
+        self.encoder = encoder
+        self.decoder = decoder
         return
 
     def save_to_directory(self, directory, file = "vae") -> None:
