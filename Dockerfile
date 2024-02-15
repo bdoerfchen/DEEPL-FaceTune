@@ -13,6 +13,8 @@ RUN pip install \
             keras==2.15.0 
 # Copy internal source files
 COPY src/ src/
+# Download VAE model file
+RUN wget -P src/python/models/vae/ files.bissendorf.co/deepl/vae.keras
 
 # Container is healthy if eel/bottle serves index.html
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 CMD [ "curl", "localhost:8080/" ]
