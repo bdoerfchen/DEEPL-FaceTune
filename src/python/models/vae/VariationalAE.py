@@ -4,6 +4,7 @@ import os
 import tensorflow as tf
 import keras
 import numpy as np
+from PIL import Image
 
 from python.models.AEModel import AEModel
 from python.models.vae.dependencies.BaseVAE import BaseVAE
@@ -21,10 +22,11 @@ class VariationalAE(AEModel):
         self.model = BaseVAE.load_from_directory(VariationalAE.MODEL_DIRPATH, file="vae")
 
     def encode(self, img) -> list[float]:
-        assert img.shape == (256, 256, 3)
+        # Rescale image to fit expected size
+        img_r = np.array(Image.fromarray(img).resize((256, 256)))
 
         # Normalize image
-        img_i = np.multiply(img, 1/255)
+        img_i = np.multiply(img_r, 1/255)
         img_i = np.reshape(img_i, (1, 256, 256, 3))
 
         # Encode and sample
