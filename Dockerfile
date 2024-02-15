@@ -17,7 +17,7 @@ COPY src/ src/
 RUN wget -P src/python/models/vae/ files.bissendorf.co/deepl/vae.keras
 
 # Container is healthy if eel/bottle serves index.html
-HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 CMD [ "curl", "localhost:8080/" ]
+#HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 CMD [ "curl", "localhost:8080/" ]
 
 EXPOSE 8080
 # Run main.py as unprivileged user
