@@ -38,7 +38,7 @@ def main():
 
     # Start the index.html file 
     print("Starting server on :8080")
-    eel.start("index.html", mode=None, host='0.0.0.0', port=8080)
+    eel.start("index.html", mode=None, host='0.0.0.0', port=8080, shutdown_delay=1e10)
 
 
 
